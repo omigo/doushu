@@ -1,6 +1,9 @@
 package doushu
 
-import "bytes"
+import (
+	"bytes"
+	"fmt"
+)
 
 type MingPan struct {
 	MingZhu *MingZhu
@@ -10,10 +13,10 @@ type MingPan struct {
 	MingGong *Gong
 	ShenGong *Gong
 
-	Positions []element // 星所在宫的地支代码
+	Positions []Element // 星所在宫的地支代码
 }
 
-func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi element) *MingPan {
+func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingPan {
 	mingZhu := &MingZhu{
 		Name:   name,
 		Gender: gender,
@@ -27,14 +30,14 @@ func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi element) *Mi
 
 	gongs := make([]*Gong, 12)
 	for i := Zi; i <= Hai; i++ {
-		gongs[i] = &Gong{
+		gongs[i-Zi] = &Gong{
 			Dizhi: i,
 		}
 	}
 
-	positions := make([]element, End)
+	positions := make([]Element, End)
 	for i := 0; i < int(End); i++ {
-		positions[i] = UnknownElement(-1)
+		positions[i] = Element(-1)
 	}
 
 	return &MingPan{
@@ -46,38 +49,42 @@ func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi element) *Mi
 
 type MingZhu struct {
 	Name   string
-	Gender element
+	Gender Element
 
-	NianGan element
-	NianZhi element
-	Yue     element
-	Ri      element
-	Shi     element
+	NianGan Element
+	NianZhi Element
+	Yue     Element
+	Ri      Element
+	Shi     Element
 
-	Yinyang  element
-	Wuxingju element
+	Yinyang  Element
+	Wuxingju Element
+}
+
+func (m *MingZhu) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf(`"%s %s%s年 %s%s %s时 %s%s %s"`, m.Name,
+		ToName(m.NianGan), ToName(m.NianZhi), ToName(m.Yue), ToName(m.Ri), ToName(m.Shi),
+		ToName(m.Yinyang), ToName(m.Gender), ToName(m.Wuxingju),
+	)), nil
 }
 
 type Gong struct {
-	Dizhi   DizhiElement
-	Tiangan TianganElement
-	Gong    GongElement
+	Dizhi   Element
+	Tiangan Element
+	Gong    Element
 
-	Stars  Stars
-	Lights []element
+	Stars  []Element
+	Lights []Element
 }
 
-type Stars []StarElement
-
-func (es Stars) MarshalJSON() ([]byte, error) {
+func (m *Gong) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
-	buf.WriteByte('[')
-	for i, e := range es {
-		if i > 0 {
-			buf.WriteByte(',')
-		}
-		buf.WriteString(`"` + e.String() + `"`)
+	for _, star := range m.Stars {
+		buf.WriteString(ToName(star))
+		buf.WriteString(" ")
 	}
-	buf.WriteByte(']')
-	return buf.Bytes(), nil
+
+	return []byte(fmt.Sprintf(`"%s%s %s: %s"`,
+		ToName(m.Tiangan), ToName(m.Dizhi), ToName(m.Gong), buf.String(),
+	)), nil
 }

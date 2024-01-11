@@ -1,14 +1,13 @@
 package doushu
 
 import (
+	"encoding/json"
 	"testing"
 
-	"github.com/omigo/g"
 )
 
 func TestArrange(t *testing.T) {
-	ctx := g.WithTraceId()
-	ctx = g.WithLevel(ctx, g.Ltrace)
-	pan := Arrange(ctx, "周延发", Nan, Ji, Si, Sanyue, Shiliu, Hai)
-	g.Debug(g.WithTraceId(), pan)
+	pan := Arrange( "周延发", Nan, Ji, Si, Sanyue, Shiliu, Hai)
+	bs, _:=json.MarshalIndent( pan, "", "  ")
+	t.Log( string( bs))
 }

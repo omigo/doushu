@@ -1,80 +1,16 @@
 package doushu
 
-import (
-	"github.com/omigo/g"
-)
-
-func ValueOf(name string) element {
-	var idx int
-	for i, v := range indexes {
+func ValueOf(name string) Element {
+	for i, v := range names {
 		if v == name {
-			idx = i
-			break
+			return i
 		}
 	}
-
-	if idx == -1 {
-		g.Error(g.WithTraceId(), name, "not found")
-		return UnknownElement(-1)
-	}
-	switch {
-	case idx < 2:
-		return YingyangElement(idx)
-	case idx < 4:
-		return NannvElement(idx - 2)
-	case idx < 9:
-		return WuxingElement(idx - 4)
-	case idx < 21:
-		return ShenxiaoElement(idx - 9)
-	case idx < 31:
-		return TianganElement(idx - 21)
-	case idx < 43:
-		return DizhiElement(idx - 31)
-	case idx < 55:
-		return NongliYueElement(idx - 43)
-	case idx < 85:
-		return NongliRiElement(idx - 55)
-	case idx < 98:
-		return GongElement(idx - 85)
-	case idx < 103:
-		return WuxingjuElement(idx - 98)
-	default:
-		return StarElement(idx - 103)
-	}
+	// log.Printf("%s not found", name)
+	return -1
 }
 
-func toString(e element) string {
-	var start int
-	switch e.(type) {
-	case YingyangElement:
-		start = 0
-	case NannvElement:
-		start = 2
-	case WuxingElement:
-		start = 4
-	case ShenxiaoElement:
-		start = 9
-	case TianganElement:
-		start = 21
-	case DizhiElement:
-		start = 31
-	case NongliYueElement:
-		start = 43
-	case NongliRiElement:
-		start = 55
-	case GongElement:
-		start = 85
-	case WuxingjuElement:
-		start = 98
-	case StarElement:
-		start = 103
-	default:
-		return "unknown"
-	}
-	return indexes[start+e.Value()]
-}
-
-var indexes = []string{
+var names = []string{
 	// 0 两仪
 	"阳", // Yang
 	"阴", // Yin2
@@ -169,19 +105,19 @@ var indexes = []string{
 	"二九", // Erjiu
 	"三十", // Sanshi
 	// 85 身宫和命等十二宫
-	"身宫",  // ShenGong
-	"命宫",  // MingGong
-	"父母宫", // Fumu
-	"福德宫", // Fude
-	"田宅宫", // Tian
-	"官禄宫", // Guanlu
-	"交友宫", // Jiaoyou
-	"迁移宫", // Qianyi
-	"疾厄宫", // Jie
-	"财帛宫", // Caibo
-	"子女宫", // Zinv
-	"夫妻宫", // Fuqi
-	"兄弟宫", // Xiongdi
+	"身宫", // ShenGong
+	"命宫", // MingGong
+	"父母", // Fumu
+	"福德", // Fude
+	"田宅", // Tian
+	"官禄", // Guanlu
+	"交友", // Jiaoyou
+	"迁移", // Qianyi
+	"疾厄", // Jie
+	"财帛", // Caibo
+	"子女", // Zinv
+	"夫妻", // Fuqi
+	"兄弟", // Xiongdi
 	// 97  五行局
 	"水二局", // Shui2Ju
 	"木三局", // Mu3Ju

@@ -1,145 +1,138 @@
 package doushu
 
-import (
-	"context"
-	"fmt"
-)
+import "fmt"
 
-func GetTianganYinyang(gan element) element {
-	return p.get("十天干所属表", DizhiElement(0), gan)
+func GetTianganYinyang(gan Element) Element {
+	return p.get("十天干所属表", 0, gan-Jia)
 }
 
-func GetDizhiYingyang(zhi element) element {
-	return p.get("十二地支所属表", DizhiElement(0), zhi)
+func GetDizhiYingyang(zhi Element) Element {
+	return p.get("十二地支所属表", 0, zhi-Zi)
 }
 
-func GetYinShou(niangan element) element {
-	return p.get("起寅首天干表", DizhiElement(0), niangan)
+func GetYinShou(niangan Element) Element {
+	return p.get("起寅首天干表", 0, niangan-Jia)
 }
 
 // 安命宫表 按本生月及本生时,凡闰月生人，作下月论
-func GetMingGong(ctx context.Context, nongliYue, nongliShi element) element {
-	return p.get("安命宫表", nongliYue, nongliShi)
+func GetMingGong(nongliYue Element, shi Element) Element {
+	return p.get("安命宫表", nongliYue-Zhengyue, shi-Zi)
 }
 
-func GetShenGong(nongliYue, nongliShi element) element {
-	return p.get("安身宫表", nongliYue, nongliShi)
+func GetShenGong(nongliYue Element, shi Element) Element {
+	return p.get("安身宫表", nongliYue-Zhengyue, shi-Zi)
 }
 
-func GetOtherGong(ctx context.Context, mingZhi element) ([]element, element) {
-	return p.batchGet(ctx, "定十二宫表", mingZhi), Fumu
+func Get12GongsTiangan(niangan Element) []Element {
+	return p.batchGet("定十二宫天干表", niangan-Jia)
 }
 
-func Get12GongsTiangan(ctx context.Context, niangan element) []element {
-	return p.batchGet(ctx, "定十二宫天干表", niangan)
+func GetWuxingju(niangan Element, mingZhi Element) Element {
+	return p.get("定五行局表", niangan-Jia, mingZhi-Zi)
 }
 
-func GetWuxingju(ctx context.Context, niangan, mingZhi element) element {
-	return p.get("定五行局表", niangan, mingZhi)
+func GetZiwei(wuxinju Element, ri Element) Element {
+	return p.get("起紫微表", wuxinju-Shui2Ju, ri-Chuyi)
 }
 
-func GetZiwei(wuxinju, ri element) element {
-	return p.get("起紫微表", wuxinju, ri)
+func GetZiweiStars(ziweiZhi Element) ([]Element, Element) {
+	return p.batchGet("安紫微诸星表", ziweiZhi-Zi), Tianji
 }
 
-func GetZiweiStars(ctx context.Context, ziweiZhi element) ([]element, element) {
-	return p.batchGet(ctx, "安紫微诸星表", ziweiZhi), Tianji
+func GetTianfuStars(tianfuZhi Element) ([]Element, Element) {
+	return p.batchGet("安天府诸星表", tianfuZhi-Zi), Taiyin
 }
 
-func GetTianfuStars(ctx context.Context, tianfu element) ([]element, element) {
-	return p.batchGet(ctx, "安天府诸星表", tianfu), Taiyin
+func GetShiStars(shi Element) ([]Element, Element) {
+	return p.batchGet("安时系诸星表", shi-Zi), Wenchang
 }
 
-func GetShiStars(ctx context.Context, shi element) ([]element, element) {
-	return p.batchGet(ctx, "安时系诸星表", shi), Wenchang
+func GetHuoStar(nianZhi, shi Element) Element {
+	fmt.Println(ToName(nianZhi), ToName(shi))
+	return p.get("安火星表", nianZhi-Zi, shi-Zi)
 }
 
-func GetHuoStar(nianZhi, shi element) element {
-	fmt.Println(nianZhi, shi, p.get("安火星表", nianZhi, shi))
-	return p.get("安火星表", nianZhi, shi)
+func GetLingStar(nianZhi, shi Element) Element {
+	return p.get("安铃星表", nianZhi-Zi, shi-Zi)
 }
 
-func GetLingStar(nianZhi, shi element) element {
-	return p.get("安铃星表", nianZhi, shi)
+func GetYueStars(yue Element) ([]Element, Element) {
+	return p.batchGet("安月系诸星表", yue-Zhengyue), Zuofu
 }
 
-func GetYueStars(ctx context.Context, yue element) ([]element, element) {
-	return p.batchGet(ctx, "安月系诸星表", yue), Zuofu
-}
-
-func GetRiStars(ctx context.Context, ri, zuofu, youbi, wenchang, wenqu element) ([]element, element) {
-	return []element{
-		DizhiElement(zuofu.Add(ri) % 12),          // 三 台 从左辅上起初一，顺行，数到本日生。
-		DizhiElement((youbi.Sub(ri) + 36) % 12),   // 八 座 从右弼上起初一，逆行，数到本日生。
-		DizhiElement((wenchang.Add(ri) - 1) % 12), // 恩 光 从文昌上起初一，顺行，数到本日生再退后一步
-		DizhiElement((wenqu.Add(ri) - 1) % 12),    // 天 贵 从文曲上起初一，顺行，数到本日生再退后一步
+func GetRiStars(ri, zuofu, youbi, wenchang, wenqu Element) ([]Element, Element) {
+	fmt.Println(ToName(ri), ToName(zuofu), ToName(youbi), ToName(wenchang), ToName(wenqu))
+	return []Element{
+		(zuofu-Zi+ri-Chuyi)%12 + Zi,      // 三 台 从左辅上起初一，顺行，数到本日生。
+		(youbi-Zi-ri-Chuyi+36)%12 + Zi,   // 八 座 从右弼上起初一，逆行，数到本日生。
+		(wenchang-Zi+ri-Chuyi-1)%12 + Zi, // 恩 光 从文昌上起初一，顺行，数到本日生再退后一步
+		(wenqu-Zi+ri-Chuyi-1)%12 + Zi,    // 天 贵 从文曲上起初一，顺行，数到本日生再退后一步
 	}, Santai
 }
 
-func GetGanStars(ctx context.Context, niangan element) ([]element, element) {
-	return p.batchGet(ctx, "安干系诸星表", niangan), Lucun
+func GetGanStars(niangan Element) ([]Element, Element) {
+	return p.batchGet("安干系诸星表", niangan-Jia), Lucun
 }
 
-func Get4HuaStars(ctx context.Context, niangan element) ([]element, element) {
-	return p.batchGet(ctx, "安四化诸星表", niangan), HuaKe
+func Get4HuaStars(niangan Element) ([]Element, Element) {
+	return p.batchGet("安四化诸星表", niangan-Jia), HuaKe
 }
 
-func GetBoshi12Stars(lucun element) ([]element, element) {
+func GetBoshi12Stars(lucun Element) ([]Element, Element) {
 	panic("not implemented")
 }
 
-func GetZhiStars(ctx context.Context, nianzhi element) ([]element, element) {
-	return p.batchGet(ctx, "安支系诸星表", nianzhi), Tianma
+func GetZhiStars(nianzhi Element) ([]Element, Element) {
+	return p.batchGet("安支系诸星表", nianzhi-Zi), Tianma
 }
 
-func GetTiancai(nianzhi element) element {
-	return p.get("安天才表", DizhiElement(0), nianzhi)
+func GetTiancai(nianzhi Element) Element {
+	return p.get("安天才表", 0, nianzhi-Zi)
 }
 
-func GetTianshou(nianzhi element) element {
+func GetTianshou(nianzhi Element) Element {
 	panic("not implemented")
 }
 
-func GetChangsheng12Stars(ctx context.Context, wuxinju, yiyang, gender element) ([]element, element) {
-	top := wuxinju.Value()
-
+func GetChangsheng12Stars(wuxinju, yiyang, gender Element) ([]Element, Element) {
+	top := wuxinju - Shui2Ju
 	if (yiyang == Yang && gender == Nan) ||
 		(yiyang == Yin && gender == Nv) {
 		top = top * 2
 	} else {
 		top = top*2 + 1
 	}
-	return p.batchGet(ctx, "安五行长生十二星表", DizhiElement(top)), Changsheng
+	return p.batchGet("安五行长生十二星表", top), Changsheng
 }
 
-func GetJiekong(niangan element) element {
-	return p.get("安截路空亡表(截空)", DizhiElement(0), niangan)
+func GetJiekong(niangan Element) Element {
+	return p.get("安截路空亡表(截空)", 0, niangan-Jia)
 }
 
-func GetXunkong(niangan, nianzhi element) element {
-	return p.get("安旬中空亡表(旬空)", nianzhi, niangan)
+func GetXunkong(niangan, nianzhi Element) Element {
+	return p.get("安旬中空亡表(旬空)", nianzhi-Zi, niangan-Jia)
 }
 
-func GetShangShi(ctx context.Context, mingzhi element) ([]element, element) {
-	return p.batchGet(ctx, "安天伤、天使表", mingzhi), Tianshang
+func GetShangShi(mingzhi Element) ([]Element, Element) {
+	return p.batchGet("安天伤、天使表", mingzhi-Zi), Tianshang
 }
 
-func GetMingzhu(mingzhi element) element {
-	return p.get("安命主表", DizhiElement(0), mingzhi)
+func GetMingzhu(mingzhi Element) Element {
+	return p.get("安命主表", 0, mingzhi-Zi)
 }
 
-func GetShenZhu(nianzhi element) element {
-	return p.get("安身主表", DizhiElement(0), nianzhi)
+func GetShenZhu(nianzhi Element) Element {
+	return p.get("安身主表", 0, nianzhi-Zi)
 }
 
-func GetLiuNianJiangQianStars(ctx context.Context, nianzhi element) ([]element, element) {
-	return p.batchGet(ctx, "安流年将前诸星表", nianzhi), Jiangxing
+func GetLiuNianJiangQianStars(nianzhi Element) ([]Element, Element) {
+	return p.batchGet("安流年将前诸星表", nianzhi-Zi), Jiangxing
 }
 
-func GetLiuNianSuiQianStars(ctx context.Context, nianzhi element) ([]element, element) {
-	return p.batchGet(ctx, "安流年岁前诸星表", nianzhi), Suijian
+func GetLiuNianSuiQianStars(nianzhi Element) ([]Element, Element) {
+	return p.batchGet("安流年岁前诸星表", nianzhi-Zi), Suijian
 }
 
-func GetZiNianDouJunPositions(shi, yue element) element {
-	return p.get("安子年斗君表", shi, yue)
+func GetZiNianDouJunPositions(shi, yue Element) Element {
+	return p.get("安子年斗君表", shi-Zi, yue-Zhengyue)
 }
