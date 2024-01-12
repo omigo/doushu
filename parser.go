@@ -22,13 +22,13 @@ func init() {
 }
 
 type Parser struct {
-	index   []int
+	index   []Element
 	titles  []string
 	headers []string
 	starts  []int
 }
 
-func (p *Parser) get(title string, left, top Element) int {
+func (p *Parser) get(title string, left, top int) Element {
 	var i int
 	for ; i < len(p.titles); i++ {
 		if p.titles[i] == title {
@@ -40,18 +40,18 @@ func (p *Parser) get(title string, left, top Element) int {
 		return -1
 	}
 	start := p.starts[i]
-	rows := p.index[start]
-	if left > rows || top > p.index[start+1] {
+	rows := int(p.index[start])
+	if left > rows || top > int(p.index[start+1]) {
 		log.Printf("out of range: %d %d", left, top)
 		return -1
 	}
 
-	idx := start + 2 + int(top*rows+left)
+	idx := start + 2 + top*rows + left
 
 	return p.index[idx]
 }
 
-func (p *Parser) batchGet(title string, top Element) []int {
+func (p *Parser) batchGet(title string, top int) []Element {
 	var i int
 	for ; i < len(p.titles); i++ {
 		if p.titles[i] == title {
@@ -63,15 +63,15 @@ func (p *Parser) batchGet(title string, top Element) []int {
 		return nil
 	}
 	start := p.starts[i]
-	rows := p.index[start]
-	if top > p.index[start+1] {
+	rows := int(p.index[start])
+	if top > int(p.index[start+1]) {
 		log.Printf("title=%s, out of range: %d", title, top)
 		return nil
 	}
 
-	idx := start + 2 + int(top*rows)
+	idx := start + 2 + top*rows
 
-	return p.index[idx : idx+int(rows)]
+	return p.index[idx : idx+rows]
 }
 
 func splitData(data string) (titles, headers, contents []string) {
@@ -128,7 +128,7 @@ func buildIndex(p *Parser, frags []string) {
 		if strings.HasSuffix(top, "*") {
 			multiCols = len(strings.Split(table[0][1], ""))
 		}
-		p.index = append(p.index, (len(table)-1)*multiRows, (len(table[0])-1)*multiCols)
+		p.index = append(p.index, Element((len(table)-1)*multiRows), Element((len(table[0])-1)*multiCols))
 		for col := 1; col < len(table[0]); col++ {
 			for m := 0; m < multiCols; m++ { // 子丑,寅卯,辰巳,午未,申酉,戌亥
 				for m := 0; m < multiRows; m++ { // 子辰申,丑巳酉,寅午戌,卯未亥

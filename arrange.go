@@ -26,8 +26,12 @@ func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingP
 	setYuePositions(pan)              // // 安月系诸星表
 	setRiPositions(pan)               // // 安日系诸星表
 	setGanPositions(pan)              // // 安干系诸星表
+	setSihuaPositions(pan)            // // 安四化星表
+	setBoshi12StarPositions(pan)      // // 安生年博士十二星法
 	setZhiPositions(pan)              // // 安支系诸星表
 	setChangshengPositions(pan)       // // 安五行长生十二星表
+	setTiancaiPosition(pan)           // // 安天才星表
+	setTianshouPosition(pan)          // // 安天寿星表
 	setJiekong(pan)                   // // 安截路空亡表(截空)
 	setXunkong(pan)                   // // 安旬中空亡表(旬空)
 	setTianShangTianshi(pan)          // // 安天伤、天使表
@@ -35,7 +39,7 @@ func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingP
 	setShenZhu(pan)                   // // 安身主表
 	setLiuNianJiangQianPositions(pan) // // 安流年将前诸星表
 	setLiuNianSuiQianPositions(pan)   // // 安流年岁前诸星表
-	// SetZiNianDouJunPositions( pan)     // // 安子年斗君表
+	setZiNianDouJunPosition(pan)      // // 安子年斗君表
 
 	for i := 0; i < 12; i++ {
 		poses := make([]Element, 0, 16)
@@ -56,23 +60,25 @@ func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingP
 
 func setTiangan(pan *MingPan) {
 	shouTiangan := GetYinShou(pan.MingZhu.NianGan)
-	fmt.Println(ToName(shouTiangan))
-	for i := 0; i < 12; i++ {
-		pan.Gongs[(Yin-Zi+i)%12].Tiangan = (shouTiangan-Jia+i)%10 + Jia
+	for i, gan := range shouTiangan.NextTo(12) {
+		pan.Gongs[i].Tiangan = gan
 	}
 }
 
 func setMingShen12Gong(pan *MingPan) {
 	mingZhi := GetMingGong(pan.MingZhu.Yue, pan.MingZhu.Shi)
 	shenZhi := GetShenGong(pan.MingZhu.Yue, pan.MingZhu.Shi)
-
-	for gong := MingGong; gong <= Xiongdi; gong++ {
-		pan.Gongs[(mingZhi-Zi+gong)%12].Gong = gong
+	fmt.Println(mingZhi, shenZhi)
+	poses, first := Get12Gongs(mingZhi)
+	for i, zhi := range poses {
+		pan.Gongs[zhi.Value()].Gong = first.Next(i)
+		pan.Positions[first.Next(i)] = zhi
 	}
-	pan.Gongs[shenZhi-Zi].Gong = ShenGong
 
-	pan.MingGong = pan.Gongs[mingZhi-Zi]
-	pan.ShenGong = pan.Gongs[shenZhi-Zi]
+	pan.MingGong = pan.Gongs[mingZhi.Value()]
+	pan.ShenGong = pan.Gongs[shenZhi.Value()]
+
+	pan.Positions[ShenGong] = shenZhi
 }
 
 func setWuxingju(pan *MingPan) {
@@ -91,7 +97,7 @@ func setZiwei(pan *MingPan) {
 func setZiweiPositions(pan *MingPan) {
 	poses, first := GetZiweiStars(pan.Positions[Ziwei])
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 
@@ -99,7 +105,7 @@ func setZiweiPositions(pan *MingPan) {
 func setTianfuPositions(pan *MingPan) {
 	poses, first := GetTianfuStars(pan.Positions[Tianfu])
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 
@@ -107,13 +113,14 @@ func setTianfuPositions(pan *MingPan) {
 func setShiPositions(pan *MingPan) {
 	poses, first := GetShiStars(pan.MingZhu.Shi)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 
 func setHuoXingPosition(pan *MingPan) {
 	pan.Positions[HuoXing] = GetHuoStar(pan.MingZhu.NianZhi, pan.MingZhu.Shi)
 }
+
 func setLingXingPosition(pan *MingPan) {
 	pan.Positions[LingXing] = GetLingStar(pan.MingZhu.NianZhi, pan.MingZhu.Shi)
 }
@@ -122,7 +129,7 @@ func setLingXingPosition(pan *MingPan) {
 func setYuePositions(pan *MingPan) {
 	poses, first := GetYueStars(pan.MingZhu.Yue)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 func setRiPositions(pan *MingPan) {
@@ -131,28 +138,59 @@ func setRiPositions(pan *MingPan) {
 		pan.Positions[Wenchang], pan.Positions[Wenqu],
 	)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 
 func setGanPositions(pan *MingPan) {
 	poses, first := GetGanStars(pan.MingZhu.NianGan)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
+	}
+}
+
+func setSihuaPositions(pan *MingPan) {
+	poses, first := GetSihuaStars(pan.MingZhu.NianGan)
+	for i, zhi := range poses {
+		pan.Positions[first.Next(i)] = zhi
+	}
+}
+
+func setBoshi12StarPositions(pan *MingPan) {
+	lucunPos := pan.Positions[Lucun]
+	var direct bool
+	if (pan.MingZhu.Yinyang == Yang && pan.MingZhu.Gender == Nan) ||
+		(pan.MingZhu.Yinyang == Yin && pan.MingZhu.Gender == Nv) {
+		direct = true
+	}
+	for i, star := range Boshi.NextTo(12) {
+		if direct {
+			pan.Positions[star] = lucunPos.Next(i)
+		} else {
+			pan.Positions[star] = lucunPos.Pre(i)
+		}
 	}
 }
 
 func setZhiPositions(pan *MingPan) {
 	poses, first := GetZhiStars(pan.MingZhu.NianZhi)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
+}
+
+func setTiancaiPosition(pan *MingPan) {
+	pan.Positions[Tiancai] = GetTiancai(pan.MingZhu.NianGan)
+}
+
+func setTianshouPosition(pan *MingPan) {
+	pan.Positions[Tianshou] = GetTianshou(pan.ShenGong.Dizhi, pan.MingZhu.NianGan)
 }
 
 func setChangshengPositions(pan *MingPan) {
 	poses, first := GetChangsheng12Stars(pan.MingZhu.Wuxingju, pan.MingZhu.Yinyang, pan.MingZhu.Gender)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 
@@ -166,7 +204,7 @@ func setXunkong(pan *MingPan) {
 func setTianShangTianshi(pan *MingPan) {
 	poses, first := GetShangShi(pan.MingGong.Dizhi)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 func setMingZhu(pan *MingPan) {
@@ -179,13 +217,18 @@ func setShenZhu(pan *MingPan) {
 func setLiuNianJiangQianPositions(pan *MingPan) {
 	poses, first := GetLiuNianJiangQianStars(pan.MingZhu.NianZhi)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
 }
 
 func setLiuNianSuiQianPositions(pan *MingPan) {
 	poses, first := GetLiuNianSuiQianStars(pan.MingZhu.NianZhi)
 	for i, zhi := range poses {
-		pan.Positions[int(first)+i] = zhi
+		pan.Positions[first.Next(i)] = zhi
 	}
+}
+
+func setZiNianDouJunPosition(pan *MingPan) {
+	pos := GetZiNianDouJun(pan.MingZhu.Shi, pan.MingZhu.Yue)
+	pan.Positions[Ziniandoujun] = pos
 }

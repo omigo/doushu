@@ -3,7 +3,7 @@ package doushu
 func ValueOf(name string) Element {
 	for i, v := range names {
 		if v == name {
-			return i
+			return Element(i)
 		}
 	}
 	// log.Printf("%s not found", name)
@@ -263,4 +263,6 @@ var names = []string{
 	"(天德)", // Tiande
 	"(吊客)", // Diaoke
 	"病符",   // Bingfu
+
+	"子年斗君", // Ziniandoujun
 }

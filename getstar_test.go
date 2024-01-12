@@ -24,7 +24,7 @@ func TestGetZiwei(t *testing.T) {
 
 func TestGetZiweiStars(t *testing.T) {
 	poses, star := GetZiweiStars(You)
-	t.Log(ToName(star), ToName(poses[0]))
+	t.Log(star.String(), poses[0].String())
 	if poses[0] != Shen {
 		t.Fatal("GetZiweiStars error")
 	}
@@ -32,6 +32,14 @@ func TestGetZiweiStars(t *testing.T) {
 
 func TestGetHuoStar(t *testing.T) {
 	if GetHuoStar(Si, Hai) != Yin {
-		t.Fatal(ToName(GetHuoStar(Si, Hai)))
+		t.Fatal(GetHuoStar(Si, Hai))
+	}
+}
+
+func TestGetChangshengStars(t *testing.T) {
+	poses, star := GetChangsheng12Stars(Jin4Ju, Yang, Nv)
+	t.Log(star.String(), poses[0].String())
+	if poses[0] != Si {
+		t.Fatal("GetZiweiStars error")
 	}
 }

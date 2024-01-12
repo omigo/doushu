@@ -1,9 +1,99 @@
 package doushu
 
-type Element = int
+import "log"
 
-func ToName(e Element) string {
+type Element int
+
+func (e Element) Category() (num int, first Element) {
+	if e >= Zi && e <= Hai {
+		return int(Hai-Zi) + 1, Zi
+	}
+	if e >= Jia && e <= Gui {
+		return int(Gui-Jia) + 1, Jia
+	}
+
+	switch {
+	case e >= End:
+		if e > End {
+			log.Printf("invalid element: %d", e)
+		}
+		return 0, e
+	case e >= Ziwei:
+		return int(End - Ziwei), Ziwei
+	case e >= Shui2Ju:
+		return int(Huo6Ju-Shui2Ju) + 1, Shui2Ju
+	case e >= MingGong:
+		return int(Xiongdi-MingGong) + 1, MingGong
+	case e >= ShenGong:
+		return 1, ShenGong
+	case e >= Chuyi:
+		return int(Sanshi-Chuyi) + 1, Chuyi
+	case e >= Zhengyue:
+		return int(Shieryue-Zhengyue) + 1, Zhengyue
+	case e >= Zi:
+		return int(Hai-Zi) + 1, Zi
+	case e >= Jia:
+		return int(Gui-Jia) + 1, Jia
+	case e >= ShuXiao:
+		return int(ZhuXiao-ShuXiao) + 1, ShuXiao
+	case e >= Mu:
+		return int(Shui-Mu) + 1, Mu
+	case e >= Nan:
+		return int(Nv-Nan) + 1, Nan
+	case e >= Yang:
+		return int(Yin2-Yang) + 1, Yang
+	default:
+		log.Printf("invalid element: %d", e)
+		return int(e), e
+	}
+}
+
+func (e Element) Value() int {
+	if e >= Zi && e <= Hai {
+		return int(e - Zi)
+	}
+	if e >= Jia && e <= Gui {
+		return int(e - Jia)
+	}
+
+	_, fisrt := e.Category()
+	return int(e - fisrt)
+}
+
+func (e Element) String() string {
 	return names[e]
+}
+
+func (e Element) Next(n int) Element {
+	if n == 0 {
+		return e
+	}
+	num, first := e.Category()
+	return Element((e.Value()+n)%num) + first
+}
+
+func (e Element) Pre(n int) Element {
+	if n == 0 {
+		return e
+	}
+	num, first := e.Category()
+	return Element((e.Value()-n+num)%num) + first
+}
+
+func (e Element) NextTo(n int) []Element {
+	ret := make([]Element, n)
+	for i := 0; i < n; i++ {
+		ret[i] = e.Next(i)
+	}
+	return ret
+}
+
+func (e Element) PreTo(n int) []Element {
+	ret := make([]Element, n)
+	for i := 0; i < n; i++ {
+		ret[i] = e.Pre(i)
+	}
+	return ret
 }
 
 const (
@@ -266,6 +356,8 @@ const (
 	Tiande   // (天德)
 	Diaoke   // (吊客)
 	Bingfu2  // (病符)
+
+	Ziniandoujun // 子年斗君
 
 	End
 )
