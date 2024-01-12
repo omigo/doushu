@@ -1,5 +1,7 @@
 package doushu
 
+import "fmt"
+
 func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingPan {
 	// 十二宫，每宫一个地支
 	pan := NewMingPan(name, gender, niangan, nianzhi, yue, ri, shi)
@@ -54,9 +56,9 @@ func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingP
 
 func setTiangan(pan *MingPan) {
 	shouTiangan := GetYinShou(pan.MingZhu.NianGan)
-
-	for i := Zi; i <= Hai; i++ {
-		pan.Gongs[(Yin+i)%12].Tiangan = (shouTiangan + i) % 12
+	fmt.Println(ToName(shouTiangan))
+	for i := 0; i < 12; i++ {
+		pan.Gongs[(Yin-Zi+i)%12].Tiangan = (shouTiangan-Jia+i)%10 + Jia
 	}
 }
 

@@ -126,12 +126,12 @@ var names = []string{
 	"火六局", // Huo6Ju
 	// 102
 	"紫微", // Ziwei
-	"天机", // Tianji
+	"天府", // Tianfu
 	"太阳", // Taiyang
 	"武曲", // Wuqu
+	"天机", // Tianji
 	"天同", // Tiantong
 	"廉贞", // Lianzhen
-	"天府", // Tianfu
 	// # 天府诸星
 	"太阴", // Taiyin
 	"贪狼", // Tanlang

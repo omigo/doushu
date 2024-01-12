@@ -36,7 +36,7 @@ func GetZiwei(wuxinju Element, ri Element) Element {
 }
 
 func GetZiweiStars(ziweiZhi Element) ([]Element, Element) {
-	return p.batchGet("安紫微诸星表", ziweiZhi-Zi), Tianji
+	return p.batchGet("安紫微诸星表", ziweiZhi-Zi), Tianfu
 }
 
 func GetTianfuStars(tianfuZhi Element) ([]Element, Element) {
@@ -48,7 +48,6 @@ func GetShiStars(shi Element) ([]Element, Element) {
 }
 
 func GetHuoStar(nianZhi, shi Element) Element {
-	fmt.Println(ToName(nianZhi), ToName(shi))
 	return p.get("安火星表", nianZhi-Zi, shi-Zi)
 }
 
@@ -63,10 +62,10 @@ func GetYueStars(yue Element) ([]Element, Element) {
 func GetRiStars(ri, zuofu, youbi, wenchang, wenqu Element) ([]Element, Element) {
 	fmt.Println(ToName(ri), ToName(zuofu), ToName(youbi), ToName(wenchang), ToName(wenqu))
 	return []Element{
-		(zuofu-Zi+ri-Chuyi)%12 + Zi,      // 三 台 从左辅上起初一，顺行，数到本日生。
-		(youbi-Zi-ri-Chuyi+36)%12 + Zi,   // 八 座 从右弼上起初一，逆行，数到本日生。
-		(wenchang-Zi+ri-Chuyi-1)%12 + Zi, // 恩 光 从文昌上起初一，顺行，数到本日生再退后一步
-		(wenqu-Zi+ri-Chuyi-1)%12 + Zi,    // 天 贵 从文曲上起初一，顺行，数到本日生再退后一步
+		(zuofu-Zi+(ri-Chuyi))%12 + Zi,         // 三 台 从左辅上起初一，顺行，数到本日生。
+		(youbi-Zi-(ri-Chuyi)+36)%12 + Zi,      // 八 座 从右弼上起初一，逆行，数到本日生。
+		(wenchang-Zi+(ri-Chuyi)-1+12)%12 + Zi, // 恩 光 从文昌上起初一，顺行，数到本日生再退后一步
+		(wenqu-Zi+(ri-Chuyi)-1+12)%12 + Zi,    // 天 贵 从文曲上起初一，顺行，数到本日生再退后一步
 	}, Santai
 }
 

@@ -129,12 +129,12 @@ const (
 
 	Ziwei // 紫微
 	// # 紫微诸星
-	Tianji   // 天机
+	Tianfu   // 天府
 	Taiyang  // 太阳
 	Wuqu     // 武曲
+	Tianji   // 天机
 	Tiantong // 天同
 	Lianzhen // 廉贞
-	Tianfu   // 天府
 	// # 天府诸星
 	Taiyin    // 太阴
 	Tanlang   // 贪狼
