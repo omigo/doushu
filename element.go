@@ -1,6 +1,8 @@
 package doushu
 
-import "log"
+import (
+	"log"
+)
 
 type Element int
 
@@ -20,28 +22,28 @@ func (e Element) Category() (num int, first Element) {
 		return 0, e
 	case e >= Ziwei:
 		return int(End - Ziwei), Ziwei
-	case e >= Shui2Ju:
-		return int(Huo6Ju-Shui2Ju) + 1, Shui2Ju
-	case e >= MingGong:
-		return int(Xiongdi-MingGong) + 1, MingGong
-	case e >= ShenGong:
-		return 1, ShenGong
+	case e >= Shui2ju:
+		return int(Huo6ju-Shui2ju) + 1, Shui2ju
+	case e >= Shengong:
+		return 1, Shengong
+	case e >= Minggong:
+		return int(Xiongdi-Minggong) + 1, Minggong
 	case e >= Chuyi:
 		return int(Sanshi-Chuyi) + 1, Chuyi
-	case e >= Zhengyue:
-		return int(Shieryue-Zhengyue) + 1, Zhengyue
+	case e >= Yiyue:
+		return int(Shieryue-Yiyue) + 1, Yiyue
 	case e >= Zi:
 		return int(Hai-Zi) + 1, Zi
 	case e >= Jia:
 		return int(Gui-Jia) + 1, Jia
-	case e >= ShuXiao:
-		return int(ZhuXiao-ShuXiao) + 1, ShuXiao
+	case e >= Shu:
+		return int(Zhu-Shu) + 1, Shu
 	case e >= Mu:
 		return int(Shui-Mu) + 1, Mu
 	case e >= Nan:
 		return int(Nv-Nan) + 1, Nan
 	case e >= Yang:
-		return int(Yin2-Yang) + 1, Yang
+		return int(YinXing-Yang) + 1, Yang
 	default:
 		log.Printf("invalid element: %d", e)
 		return int(e), e
@@ -56,8 +58,8 @@ func (e Element) Value() int {
 		return int(e - Jia)
 	}
 
-	_, fisrt := e.Category()
-	return int(e - fisrt)
+	_, first := e.Category()
+	return int(e - first)
 }
 
 func (e Element) String() string {
@@ -97,9 +99,8 @@ func (e Element) PreTo(n int) []Element {
 }
 
 const (
-	// 两仪
-	Yang Element = iota // 阳
-	Yin2                // 阴
+	Yang    Element = iota // 阳
+	YinXing                // 阴
 
 	Nan // 男
 	Nv  // 女
@@ -110,18 +111,18 @@ const (
 	Jin  // 金
 	Shui // 水
 
-	ShuXiao  // 鼠
-	NiuXiao  // 牛
-	HuXiao   // 虎
+	Shu      // 鼠
+	Niu      // 牛
+	Hu       // 虎
 	TuXiao   // 兔
-	LongXiao // 龙
-	SheXiao  // 蛇
-	MaXiao   // 马
+	Long     // 龙
+	She      // 蛇
+	Ma       // 马
 	YangXiao // 羊
-	HouXiao  // 猴
+	Hou      // 猴
 	JiXiao   // 鸡
-	GouXiao  // 狗
-	ZhuXiao  // 猪
+	Gou      // 狗
+	Zhu      // 猪
 
 	// 十天干
 	Jia   // 甲
@@ -150,7 +151,7 @@ const (
 	Hai  // 亥
 
 	// 农历月
-	Zhengyue // 正月
+	Yiyue    // 正月
 	Eryue    // 二月
 	Sanyue   // 三月
 	Siyue    // 四月
@@ -195,12 +196,11 @@ const (
 	Erjiu  // 二九
 	Sanshi // 三十
 
-	// 身宫和命等十二宫
-	ShenGong // 身宫
-	MingGong // 命宫
+	// 妻财子禄十二宫
+	Minggong // 命宫
 	Fumu     // 父母
 	Fude     // 福德
-	Tian     // 田宅
+	Tianzhai // 田宅
 	Guanlu   // 官禄
 	Jiaoyou  // 交友
 	Qianyi   // 迁移
@@ -210,12 +210,14 @@ const (
 	Fuqi     // 夫妻
 	Xiongdi  // 兄弟
 
+	Shengong // 身宫
+
 	// 五行局
-	Shui2Ju // 水二局
-	Mu3Ju   // 木三局
-	Jin4Ju  // 金四局
-	Tu5Ju   // 土五局
-	Huo6Ju  // 火六局
+	Shui2ju // 水二局
+	Mu3ju   // 木三局
+	Jin4ju  // 金四局
+	Tu5ju   // 土五局
+	Huo6ju  // 火六局
 
 	Ziwei // 紫微
 	// # 紫微诸星
@@ -357,7 +359,7 @@ const (
 	Diaoke   // (吊客)
 	Bingfu2  // (病符)
 
-	Ziniandoujun // 子年斗君
+	Zidou // 子斗
 
 	End
 )

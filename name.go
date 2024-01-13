@@ -105,7 +105,6 @@ var names = []string{
 	"二九", // Erjiu
 	"三十", // Sanshi
 	// 85 身宫和命等十二宫
-	"身宫", // ShenGong
 	"命宫", // MingGong
 	"父母", // Fumu
 	"福德", // Fude
@@ -118,6 +117,7 @@ var names = []string{
 	"子女", // Zinv
 	"夫妻", // Fuqi
 	"兄弟", // Xiongdi
+	"身宫", // ShenGong
 	// 97  五行局
 	"水二局", // Shui2Ju
 	"木三局", // Mu3Ju
@@ -264,5 +264,5 @@ var names = []string{
 	"(吊客)", // Diaoke
 	"病符",   // Bingfu
 
-	"子年斗君", // Ziniandoujun
+	"子斗", // Zidou
 }

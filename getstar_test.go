@@ -5,19 +5,19 @@ import (
 )
 
 func TestGetMingGong(t *testing.T) {
-	if GetMingGong(Zhengyue, Zi) != Yin {
+	if GetMingGong(Yiyue, Zi) != Yin {
 		t.Error("GetMingGong error")
 	}
 }
 
 func TestGetWuxingju(t *testing.T) {
-	if GetWuxingju(Jia, Zi) != Shui2Ju {
+	if GetWuxingju(Jia, Zi) != Shui2ju {
 		t.Error("GetMingGong error")
 	}
 }
 
 func TestGetZiwei(t *testing.T) {
-	if GetZiwei(Mu3Ju, Chuyi) != Chen {
+	if GetZiwei(Mu3ju, Chuyi) != Chen {
 		t.Error("GetMingGong error")
 	}
 }
@@ -37,7 +37,7 @@ func TestGetHuoStar(t *testing.T) {
 }
 
 func TestGetChangshengStars(t *testing.T) {
-	poses, star := GetChangsheng12Stars(Jin4Ju, Yang, Nv)
+	poses, star := GetChangsheng12Stars(Jin4ju, Yang, Nv)
 	t.Log(star.String(), poses[0].String())
 	if poses[0] != Si {
 		t.Fatal("GetZiweiStars error")

@@ -26,7 +26,7 @@ func Get12Gongs(mingZhi Element) ([]Element, Element) {
 	for i := 0; i < 12; i++ {
 		es[i] = mingZhi.Next(i)
 	}
-	return es, MingGong
+	return es, Minggong
 }
 
 func GetWuxingju(niangan Element, mingZhi Element) Element {
@@ -63,10 +63,10 @@ func GetYueStars(yue Element) ([]Element, Element) {
 
 func GetRiStars(ri, zuofuPos, youbiPos, wenchangPos, wenquPos Element) ([]Element, Element) {
 	return []Element{
-		zuofuPos.Next(ri.Value()),    // 三 台 从左辅上起初一，顺行，数到本日生
-		youbiPos.Pre(ri.Value()),     // 八 座 从右弼上起初一，逆行，数到本日生
-		wenchangPos.Next(ri.Value()), // 恩 光 从文昌上起初一，顺行，数到本日生再退后一步
-		wenquPos.Next(ri.Value()),    // 天 贵 从文曲上起初一，顺行，数到本日生再退后一步
+		zuofuPos.Next(ri.Value()),        // 三 台 从左辅上起初一，顺行，数到本日生
+		youbiPos.Pre(ri.Value()),         // 八 座 从右弼上起初一，逆行，数到本日生
+		wenchangPos.Next(ri.Value() - 1), // 恩 光 从文昌上起初一，顺行，数到本日生再退后一步
+		wenquPos.Next(ri.Value() - 1),    // 天 贵 从文曲上起初一，顺行，数到本日生再退后一步
 	}, Santai
 }
 
@@ -86,7 +86,8 @@ func GetZhiStars(nianzhi Element) ([]Element, Element) {
 	return p.batchGet("安支系诸星表", nianzhi.Value()), Tianma
 }
 
-func GetTiancai(nianzhi Element) Element {
+// GetTiancai  通过本生年支，得到天才星所在十二宫，可能是妻财子禄。注意，返回的不是如子丑寅卯的地支。
+func GetTiancaiGong(nianzhi Element) Element {
 	return p.get("安天才星表", 0, nianzhi.Value())
 }
 
@@ -97,7 +98,7 @@ func GetTianshou(shenggongZhi, nianZhi Element) Element {
 func GetChangsheng12Stars(wuxinju, yiyang, gender Element) ([]Element, Element) {
 	top := wuxinju.Value()
 	if (yiyang == Yang && gender == Nan) ||
-		(yiyang == Yin && gender == Nv) {
+		(yiyang == YinXing && gender == Nv) {
 		top = top * 2
 	} else {
 		top = top*2 + 1
@@ -125,14 +126,14 @@ func GetShenZhu(nianzhi Element) Element {
 	return p.get("安身主表", 0, nianzhi.Value())
 }
 
-func GetLiuNianJiangQianStars(nianzhi Element) ([]Element, Element) {
+func GetJiangqianStars(nianzhi Element) ([]Element, Element) {
 	return p.batchGet("安流年将前诸星表", nianzhi.Value()), Jiangxing
 }
 
-func GetLiuNianSuiQianStars(nianzhi Element) ([]Element, Element) {
+func GetSuiqianStars(nianzhi Element) ([]Element, Element) {
 	return p.batchGet("安流年岁前诸星表", nianzhi.Value()), Suijian
 }
 
-func GetZiNianDouJun(shi, yue Element) Element {
+func GetZidou(shi, yue Element) Element {
 	return p.get("安子年斗君表", shi.Value(), yue.Value())
 }

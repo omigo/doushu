@@ -59,6 +59,9 @@ type MingZhu struct {
 
 	Yinyang  Element
 	Wuxingju Element
+
+	Mingzhu Element
+	Shenzhu Element
 }
 
 func (m *MingZhu) MarshalJSON() ([]byte, error) {
@@ -78,7 +81,10 @@ type Gong struct {
 
 func (m *Gong) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
-	for _, star := range m.Stars {
+	for i, star := range m.Stars {
+		if i == 0 {
+			continue
+		}
 		buf.WriteString(star.String())
 		buf.WriteString(" ")
 	}
