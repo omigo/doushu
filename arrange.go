@@ -1,57 +1,44 @@
 package doushu
 
 func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingPan {
-	// 十二宫，每宫一个地支
+	// 规画命盘
 	pan := NewMingPan(name, gender, niangan, nianzhi, yue, ri, shi)
 
-	// 配干支
-	setTiangan(pan)
-	// // 定命身二宫
-	setMingShen12Gong(pan)
-	// 定五行局
-	setWuxingju(pan)
-	// 定男女阴阳
-	setYinYang(pan)
+	setTiangan(pan)        // 冠盖天支
+	setMingShen12Gong(pan) // 定命等十二宫和身宫
+	setWuxingju(pan)       // 定命宫五行局
+	setYinYang(pan)        // 定男女阴阳
 
-	// 安星时，先建议索引，即找到星所在宫的地支
-	// 最后统一把星放到宫中
 	setZiwei(pan)                // 起紫微
-	setZiweiPositions(pan)       // // 安紫微诸星表
-	setTianfuPositions(pan)      // // 安天府诸星表
-	setShiPositions(pan)         // // 安时系诸星表
-	setHuoXingPosition(pan)      // // 安火星表
-	setLingXingPosition(pan)     // //安铃星表
-	setYuePositions(pan)         // // 安月系诸星表
-	setRiPositions(pan)          // // 安日系诸星表
-	setGanPositions(pan)         // // 安干系诸星表
-	setSihuaPositions(pan)       // // 安四化星表
-	setBoshi12StarPositions(pan) // // 安生年博士十二星法
-	setZhiPositions(pan)         // // 安支系诸星表
-	setChangshengPositions(pan)  // // 安五行长生十二星表
-	setTiancaiPosition(pan)      // // 安天才星表
-	setTianshouPosition(pan)     // // 安天寿星表
-	setJiekong(pan)              // // 安截路空亡表(截空)
-	setXunkong(pan)              // // 安旬中空亡表(旬空)
-	setTianShangTianshi(pan)     // // 安天伤、天使表
-	setMingZhu(pan)              // // 安命主表
-	setShenZhu(pan)              // // 安身主表
-	setJiangqianPositions(pan)   // // 安流年将前诸星表
-	setSuiqianPositions(pan)     // // 安流年岁前诸星表
-	setZidouPosition(pan)        // // 安子年斗君表
+	setZiweiPositions(pan)       // 安紫微诸星表
+	setTianfuPositions(pan)      // 安天府诸星表
+	setShiPositions(pan)         // 安时系诸星表
+	setHuoXingPosition(pan)      // 安火星表
+	setLingXingPosition(pan)     // 安铃星表
+	setYuePositions(pan)         // 安月系诸星表
+	setRiPositions(pan)          // 安日系诸星表
+	setGanPositions(pan)         // 安干系诸星表
+	setSihuaPositions(pan)       // 安四化星表
+	setBoshi12StarPositions(pan) // 安生年博士十二星法
+	setZhiPositions(pan)         // 安支系诸星表
+	setChangshengPositions(pan)  // 安五行长生十二星表
+	setTiancaiPosition(pan)      // 安天才星表
+	setTianshouPosition(pan)     // 安天寿星表
+	setJiekong(pan)              // 安截路空亡表(截空)
+	setXunkong(pan)              // 安旬中空亡表(旬空)
+	setTianShangTianshi(pan)     // 安天伤、天使表
+	setMingZhu(pan)              // 安命主表
+	setShenZhu(pan)              // 安身主表
+	setJiangqianPositions(pan)   // 安流年将前诸星表
+	setSuiqianPositions(pan)     // 安流年岁前诸星表
+	setZidouPosition(pan)        // 安子年斗君表
 
-	for i := 0; i < 12; i++ {
-		poses := make([]Element, 0, 16)
-		gong := Element(i + int(Zi))
-		for star, zhi := range pan.Positions {
-			if zhi == -1 {
-				continue
-			}
-			if zhi == gong {
-				poses = append(poses, Element(star))
-			}
+	for star, pos := range pan.Positions {
+		if pos < Zi || pos > Hai {
+			continue
 		}
-		pan.Gongs[i].Stars = poses
-		// pan.Gongs[].Lights =
+		pan.Gongs[pos.Value()].Stars =
+			append(pan.Gongs[pos.Value()].Stars, Element(star))
 	}
 	return pan
 }

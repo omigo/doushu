@@ -14,6 +14,7 @@ type MingPan struct {
 	ShenGong *Gong `json:"-"`
 
 	Positions []Element `json:"-"` // 星所在宫的地支代码
+	Lights    []Element `json:"-"` //
 }
 
 func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingPan {
@@ -75,8 +76,7 @@ type Gong struct {
 	Tiangan Element
 	Gong    Element
 
-	Stars  []Element
-	Lights []Element
+	Stars []Element
 }
 
 func (m *Gong) MarshalJSON() ([]byte, error) {
@@ -86,7 +86,9 @@ func (m *Gong) MarshalJSON() ([]byte, error) {
 			continue
 		}
 		buf.WriteString(star.String())
-		buf.WriteString(" ")
+		buf.WriteString("[")
+		buf.WriteString(GetStarLight(star, m.Dizhi).String())
+		buf.WriteString("] ")
 	}
 	return []byte(fmt.Sprintf(`"%s%s %s: %s"`,
 		m.Tiangan, m.Dizhi, m.Gong, buf.String(),

@@ -22,6 +22,8 @@ func (e Element) Category() (num int, first Element) {
 		return 0, e
 	case e >= Ziwei:
 		return int(End - Ziwei), Ziwei
+	case e >= Miao:
+		return int(Xian-Miao) + 1, Miao
 	case e >= Shui2ju:
 		return int(Huo6ju-Shui2ju) + 1, Shui2ju
 	case e >= Shengong:
@@ -99,8 +101,10 @@ func (e Element) PreTo(n int) []Element {
 }
 
 const (
-	Yang    Element = iota // 阳
-	YinXing                // 阴
+	Unknown Element = iota
+
+	Yang    // 阳
+	YinXing // 阴
 
 	Nan // 男
 	Nv  // 女
@@ -219,6 +223,15 @@ const (
 	Tu5ju   // 土五局
 	Huo6ju  // 火六局
 
+	// 星亮度
+	Miao   // 庙
+	Wang   // 旺
+	Dedi   // 得地
+	Liyi   // 利益
+	Pinghe // 平和
+	Budedi // 不得地
+	Xian   // 陷
+
 	Ziwei // 紫微
 	// # 紫微诸星
 	Tianfu   // 天府
@@ -277,6 +290,34 @@ const (
 	HuaLu   // 化禄
 	HuaJi   // 化忌
 
+	// 支系诸星
+	Tianma   // 天马
+	Hongluan // 红鸾
+	Tianxi   // 天喜
+	Tianku   // 天哭
+	Tianxu   // 天虚
+	Guchen   // 孤辰
+	Guasu    // 寡宿
+	Jiesheng // 解神
+	Longchi  // 龙池
+	Fengge   // 凤阁
+	Feilian  // 蜚廉
+	Posui    // 破碎
+	Tiankong // 天空
+	Yuede    // 月德
+
+	Tiancai  // 天才
+	Tianshou // 天寿
+
+	Jiekong // 截空
+	Xunkong // 旬空
+
+	Tianshang // 天伤
+	Tianshi   // 天使
+
+	Mingzhu // 命主
+	Shenzhu // 身主
+
 	// 博士十二星
 	Boshi    // 博士
 	Lishi    // 力士
@@ -291,25 +332,6 @@ const (
 	Fubing   // 伏兵
 	Guanfu   // 官府
 
-	// 支系诸星
-	Tianma   // 天马
-	Jiesheng // 解神
-	Tianku   // 天哭
-	Tianxu   // 天虚
-	Longchi  // 龙池
-	Fengge   // 凤阁
-	Hongluan // 红鸾
-	Tianxi   // 天喜
-	Guchen   // 孤辰
-	Guasu    // 寡宿
-	Feilian  // 蜚廉
-	Posui    // 破碎
-	Tiankong // 天空
-	Yuede    // 月德
-
-	Tiancai  // 天才
-	Tianshou // 天寿
-
 	// 五行长生十二星
 	Changsheng // 长生
 	Muyu       // 沐浴
@@ -323,15 +345,6 @@ const (
 	JueXing    // 绝
 	TaiXing    // 胎
 	YangXing   // 养
-
-	Jiekong // 截空
-	Xunkong // 旬空
-
-	Tianshang // 天伤
-	Tianshi   // 天使
-
-	Mingzhu // 命主
-	Shenzhu // 身主
 
 	Jiangxing // 将星
 	Panan     // 攀鞍

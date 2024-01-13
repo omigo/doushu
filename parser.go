@@ -42,7 +42,7 @@ func (p *Parser) get(title string, left, top int) Element {
 	start := p.starts[i]
 	rows := int(p.index[start])
 	if left > rows || top > int(p.index[start+1]) {
-		log.Printf("out of range: %d %d", left, top)
+		log.Printf("%s out of range: %d %d", title, left, top)
 		return -1
 	}
 
@@ -65,7 +65,7 @@ func (p *Parser) batchGet(title string, top int) []Element {
 	start := p.starts[i]
 	rows := int(p.index[start])
 	if top > int(p.index[start+1]) {
-		log.Printf("title=%s, out of range: %d", title, top)
+		log.Printf("title %s, out of range: %d", title, top)
 		return nil
 	}
 
@@ -118,6 +118,11 @@ func buildIndex(p *Parser, frags []string) {
 			continue
 		}
 
+		if p.titles[i] == "诸星在十二宫庙旺利陷表" {
+			buildLightIndex(p, table)
+			continue
+		}
+
 		left, top, _ := strings.Cut(p.headers[i], "/")
 
 		var multiRows = 1
@@ -149,4 +154,40 @@ func readCSV(fragment string) [][]string {
 		log.Printf("%s: %s", err, fragment)
 	}
 	return table
+}
+
+func buildLightIndex(p *Parser, table [][]string) {
+	// /,子,丑,寅,卯,辰,巳,午,未,申,酉,戌,亥
+	// 紫微,平和,庙,。。。
+	p.index = append(p.index, Mingzhu-Ziwei, 12)
+
+	lightIndex := make([]Element, (Mingzhu-Ziwei)*12)
+
+	for light := 1; light < len(table[0]); light++ {
+		for zhi := 1; zhi < len(table); zhi++ {
+			names := table[zhi][light]
+			for _, name := range strings.Split(names, "") {
+				var has bool
+				for star := Ziwei; star <= Shenzhu; star++ {
+					if strings.Contains(star.String(), name) {
+						if name == "曲" && star == Wuqu {
+							continue
+						}
+						// if has {
+						// 	log.Printf("found duplicate %s: %s", name, star)
+						// 	continue
+						// }
+						has = true
+						idx := int(Mingzhu-Ziwei)*(zhi-1) + star.Value()
+						lightIndex[idx] = Miao.Next(light - 1)
+						break
+					}
+				}
+				if !has {
+					log.Printf("not found %s", name)
+				}
+			}
+		}
+	}
+	p.index = append(p.index, lightIndex...)
 }

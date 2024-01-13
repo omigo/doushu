@@ -103,7 +103,7 @@ func GetChangsheng12Stars(wuxinju, yiyang, gender Element) ([]Element, Element) 
 	} else {
 		top = top*2 + 1
 	}
-	return p.batchGet("安五行长生十二星表", top), Changsheng
+	return p.batchGet("安五局长生十二星表", top), Changsheng
 }
 
 func GetJiekong(niangan Element) Element {
@@ -136,4 +136,17 @@ func GetSuiqianStars(nianzhi Element) ([]Element, Element) {
 
 func GetZidou(shi, yue Element) Element {
 	return p.get("安子年斗君表", shi.Value(), yue.Value())
+}
+
+func GetStarLight(star, zhi Element) Element {
+	if star < Ziwei || star > Mingzhu {
+		return Unknown
+	}
+	if zhi < Zi || zhi > Hai {
+		return Unknown
+	}
+	if star == Zuofu || star == Youbi || star == Tiankui || star == Tianyue || star == Lucun {
+		return Miao
+	}
+	return p.get("诸星在十二宫庙旺利陷表", star.Value(), zhi.Value())
 }

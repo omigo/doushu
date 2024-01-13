@@ -7,11 +7,12 @@ func ValueOf(name string) Element {
 		}
 	}
 	// log.Printf("%s not found", name)
-	return -1
+	return Unknown
 }
 
 var names = []string{
-	// 0 两仪
+	"", // Unknown
+	//  两仪
 	"阳", // Yang
 	"阴", // Yin2
 	// 2
@@ -104,7 +105,8 @@ var names = []string{
 	"二八", // Erba
 	"二九", // Erjiu
 	"三十", // Sanshi
-	// 85 身宫和命等十二宫
+
+	// 身宫和命等十二宫
 	"命宫", // MingGong
 	"父母", // Fumu
 	"福德", // Fude
@@ -117,14 +119,24 @@ var names = []string{
 	"子女", // Zinv
 	"夫妻", // Fuqi
 	"兄弟", // Xiongdi
+
 	"身宫", // ShenGong
-	// 97  五行局
+
+	// 五行局
 	"水二局", // Shui2Ju
 	"木三局", // Mu3Ju
 	"金四局", // Jin4Ju
 	"土五局", // Tu5Ju
 	"火六局", // Huo6Ju
-	// 102
+
+	"庙",   // Miao
+	"旺",   // Wang
+	"得地",  // Dedi
+	"利益",  // Liyi
+	"平和",  // Pinghe
+	"不得地", // Budedi
+	"陷",   // Xian
+
 	"紫微", // Ziwei
 	"天府", // Tianfu
 	"太阳", // Taiyang
@@ -182,6 +194,34 @@ var names = []string{
 	"化禄", // HuaLu
 	"化忌", // HuaJi
 
+	// 支系诸星
+	"天马", // Tianma
+	"红鸾", // Hongluan
+	"天喜", // Tianxi
+	"天哭", // Tianku
+	"天虚", // Tianxu
+	"孤辰", // Guchen
+	"寡宿", // Guasu
+	"解神", // Jiesheng
+	"龙池", // Longchi
+	"凤阁", // Fengge
+	"蜚廉", // Feilian
+	"破碎", // Posui
+	"天空", // Tiankong
+	"月德", // Yuede
+
+	"天才", // Tiancai
+	"天寿", // Tianshou
+
+	"截空", // Jiekong
+	"旬空", // Xunkong
+
+	"天伤", // Tianshang
+	"天使", // Tianshi
+
+	"命主", // Mingzhu
+	"身主", // Shenzhu
+
 	// 博士十二星
 	"博士", // Boshi
 	"力士", // Lishi
@@ -196,25 +236,6 @@ var names = []string{
 	"伏兵", // Fubing
 	"官府", // Guanfu
 
-	// 支系诸星
-	"天马", // Tianma
-	"解神", // Jiesheng
-	"天哭", // Tianku
-	"天虚", // Tianxu
-	"龙池", // Longchi
-	"凤阁", // Fengge
-	"红鸾", // Hongluan
-	"天喜", // Tianxi
-	"孤辰", // Guchen
-	"寡宿", // Guasu
-	"蜚廉", // Feilian
-	"破碎", // Posui
-	"天空", // Tiankong
-	"月德", // Yuede
-
-	"天才", // Tiancai
-	"天寿", // Tianshou
-
 	// 五行长生十二星
 	"长生", // Changsheng
 	"沐浴", // Muyu
@@ -228,15 +249,6 @@ var names = []string{
 	"绝",  // JueXing
 	"胎",  // TaiXing
 	"养",  // YangXing
-
-	"截空", // Jiekong
-	"旬空", // Xunkong
-
-	"天伤", // Tianshang
-	"天使", // Tianshi
-
-	"命主", // Mingzhu
-	"身主", // Shenzhu
 
 	"将星",   // Jiangxing
 	"攀鞍",   // Panan
