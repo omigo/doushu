@@ -7,6 +7,9 @@ import (
 type Element int
 
 func (e Element) Category() (num int, first Element) {
+	if e == Unknown {
+		return 0, Unknown
+	}
 	if e >= Zi && e <= Hai {
 		return int(Hai-Zi) + 1, Zi
 	}
@@ -318,7 +321,7 @@ const (
 	Mingzhu // 命主
 	Shenzhu // 身主
 
-	// 五行长生十二星
+	// 五局长生十二星
 	Changsheng // 长生
 	Muyu       // 沐浴
 	Guandai    // 冠带
@@ -359,6 +362,7 @@ const (
 	Xianchi   // (咸池)
 	Yuexi     // 月煞
 	Wangshen  // 亡神
+
 	// 流年岁前十二星
 	Suijian        // 岁建
 	Huiqi          // 晦气

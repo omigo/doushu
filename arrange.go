@@ -85,7 +85,7 @@ func build(pan *MingPan) *MingPan {
 	// 小限
 	firsts := GetXiaoxianFirsts(pan.MingZhu.NianZhi, pan.MingZhu.Gender)
 	for i, first := range firsts {
-		pan.Gongs[i].Xiaoxians = first
+		pan.Gongs[i].Xiaoxian = first
 	}
 
 	pan.MingZhu.Mingzhu = pan.Positions[Mingzhu]
@@ -116,7 +116,7 @@ func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingP
 	setSihuaPositions(pan)       // 安四化星表
 	setBoshi12StarPositions(pan) // 安生年博士十二星法
 	setZhiPositions(pan)         // 安支系诸星表
-	setChangshengPositions(pan)  // 安五行长生十二星表
+	setChangshengPositions(pan)  // 安五局长生十二星表
 	setTiancaiPosition(pan)      // 安天才星表
 	setTianshouPosition(pan)     // 安天寿星表
 	setJiekong(pan)              // 安截路空亡表(截空)

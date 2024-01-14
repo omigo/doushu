@@ -163,7 +163,7 @@ func GetStarLevel(star Element) Element {
 
 // GetDaxianStarts 通过命宫，阴阳，性别，得到大限起始年龄所在的地址。返回 [寅,子,丑,...]，表示命在寅宫，即第一个10年在寅，第二个10年在子。
 func GetDaxians(mingZhi, yinyang, gender Element) []Element {
-	xians := make([]Element, 12)
+	xians := make([]Element, 0, 12)
 	if isYangNanYinNv(yinyang, gender) {
 		for i := 0; i < 12; i++ {
 			xians = append(xians, mingZhi.Next(i))
@@ -197,7 +197,7 @@ func GetXiaoxianStart(nianzhi Element) Element {
 // GetXiaoxians
 func GetXiaoxian(nianzhi, gender Element) []Element {
 	start := GetXiaoxianStart(nianzhi)
-	xians := make([]Element, 12)
+	xians := make([]Element, 0, 12)
 	if gender == Nan {
 		for i := 0; i < 12; i++ {
 			xians = append(xians, start.Next(i))

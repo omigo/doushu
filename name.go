@@ -222,20 +222,6 @@ var names = []string{
 	"命主", // Mingzhu
 	"身主", // Shenzhu
 
-	// 博士十二星
-	"博士", // Boshi
-	"力士", // Lishi
-	"青龙", // Qinglong
-	"小耗", // Xiaohao
-	"将军", // Jiangjun
-	"奏书", // Zoushu
-	"飞廉", // Feilian3
-	"喜神", // Xishen
-	"病符", // Bingfu
-	"大耗", // Dahao
-	"伏兵", // Fubing
-	"官府", // Guanfu
-
 	// 五行长生十二星
 	"长生", // Changsheng
 	"沐浴", // Muyu
@@ -250,6 +236,21 @@ var names = []string{
 	"胎",  // TaiXing
 	"养",  // YangXing
 
+	// 博士十二星
+	"博士", // Boshi
+	"力士", // Lishi
+	"青龙", // Qinglong
+	"小耗", // Xiaohao
+	"将军", // Jiangjun
+	"奏书", // Zoushu
+	"飞廉", // Feilian3
+	"喜神", // Xishen
+	"病符", // Bingfu
+	"大耗", // Dahao
+	"伏兵", // Fubing
+	"官府", // Guanfu
+
+	// 流年将前十二星
 	"将星",   // Jiangxing
 	"攀鞍",   // Panan
 	"岁驿",   // Suiyi
@@ -263,6 +264,7 @@ var names = []string{
 	"月煞",   // Yuexi
 	"亡神",   // Wangshen
 
+	// 流年岁前十二星
 	"岁建",   // Suijian
 	"晦气",   // Huiqi
 	"(丧门)", // Sangmen

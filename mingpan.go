@@ -3,6 +3,7 @@ package doushu
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 )
 
 type MingPan struct {
@@ -73,7 +74,7 @@ func (m *MingZhu) YinNanYangNv() bool {
 }
 
 func (m *MingZhu) String() string {
-	return fmt.Sprintf("%s %s%s年 %s%s %s时 %s%s %s\n命主：%s 身主：%s 子斗：%s",
+	return fmt.Sprintf("%s %s%s年 %s%s %s时 %s%s %s\n命主:%s 身主:%s 子斗:%s",
 		m.Name, m.NianGan, m.NianZhi, m.Yue, m.Ri, m.Shi, m.Yinyang, m.Gender, m.Wuxingju,
 		m.Mingzhu, m.Shenzhu, m.Zidou)
 }
@@ -93,27 +94,37 @@ type Gong struct {
 	Suiqian12Stars    []Element
 
 	DaxianStart int
-	Xiaoxians   int
+	Xiaoxian    int
 }
 
-func (m *Gong) String() string {
+func (g *Gong) String() string {
 	buf := bytes.NewBuffer(make([]byte, 0, 1024))
-	buf.WriteString(m.Tiangan.String())
-	buf.WriteString(m.Dizhi.String())
+	buf.WriteString(g.Tiangan.String())
+	buf.WriteString(g.Dizhi.String())
 	buf.WriteString(" ")
-	buf.WriteString(m.Gong.String())
-	if m.Shen {
+	buf.WriteString(g.Gong.String())
+	if g.Shen {
 		buf.WriteString(" ")
 		buf.WriteString(Shengong.String())
 	}
 
-	appendStars(buf, "甲级星", m.JiaStars)
-	appendStars(buf, "乙级星", m.YiStars)
-	appendStars(buf, "丙级星", m.BingStars)
-	appendStars2(buf, "长生十二星", m.Changsheng12Stars)
-	appendStars2(buf, "博士十二星", m.Boshi12Stars)
-	appendStars2(buf, "流年将前十二星", m.Jianqian12Stars)
-	appendStars2(buf, "流年岁前十二星", m.Suiqian12Stars)
+	appendStars(buf, "甲级星", g.JiaStars)
+	appendStars(buf, "乙级星", g.YiStars)
+	appendStars(buf, "丙级星", g.BingStars)
+	appendStars2(buf, "长生十二星", g.Changsheng12Stars)
+	appendStars2(buf, "博士十二星", g.Boshi12Stars)
+	appendStars2(buf, "流年将前十二星", g.Jianqian12Stars)
+	appendStars2(buf, "流年岁前十二星", g.Suiqian12Stars)
+
+	fmt.Fprintf(buf, "\n  大限: %d-%d", g.DaxianStart, g.DaxianStart+9)
+
+	buf.WriteString("\n  小限:")
+	for i := 0; i < 6; i++ {
+		if i != 0 {
+			buf.WriteString(",")
+		}
+		buf.WriteString(strconv.Itoa(g.Xiaoxian + 12*i))
+	}
 
 	return buf.String()
 }
