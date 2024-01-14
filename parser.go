@@ -157,6 +157,9 @@ func readCSV(fragment string) [][]string {
 }
 
 func buildLightIndex(p *Parser, table [][]string) {
+	// /,庙,旺,得地,利益,平和,不得地,陷
+	// 子,机府阴相梁破,武同贪巨杀,昌曲,,紫廉,,阳羊火铃
+	// ==>
 	// /,子,丑,寅,卯,辰,巳,午,未,申,酉,戌,亥
 	// 紫微,平和,庙,。。。
 	p.index = append(p.index, Mingzhu-Ziwei, 12)

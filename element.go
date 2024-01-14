@@ -81,7 +81,7 @@ func (e Element) Pre(n int) Element {
 		return e
 	}
 	num, first := e.Category()
-	return Element((e.Value()-n+num)%num) + first
+	return Element((e.Value()-n+num*12)%num) + first
 }
 
 func (e Element) NextTo(n int) []Element {
@@ -275,14 +275,14 @@ const (
 	Tiangui // 天贵
 
 	// 干系诸星表
-	Lucun    // 禄存
-	Qingyang // 擎羊
-	Tuoluo   // 陀罗
-	Tiankui  // 天魁
-	Tianyue4 // 天钺
-	Tianguan // 天官
-	Tianfu4  // 天福
-	Tianchu  // 天厨
+	Lucun        // 禄存
+	Qingyang     // 擎羊
+	Tuoluo       // 陀罗
+	Tiankui      // 天魁
+	TianyueKejia // 天钺
+	Tianguan     // 天官
+	Tianfu4      // 天福
+	Tianchu      // 天厨
 
 	// 四化星
 	HuaKe   // 化科
@@ -318,20 +318,6 @@ const (
 	Mingzhu // 命主
 	Shenzhu // 身主
 
-	// 博士十二星
-	Boshi    // 博士
-	Lishi    // 力士
-	Qinglong // 青龙
-	Xiaohao  // 小耗
-	Jiangjun // 将军
-	Zoushu   // 奏书
-	Feilian2 // 飞廉
-	Xishen   // 喜神
-	Bingfu   // 病符
-	Dahao    // 大耗
-	Fubing   // 伏兵
-	Guanfu   // 官府
-
 	// 五行长生十二星
 	Changsheng // 长生
 	Muyu       // 沐浴
@@ -346,6 +332,21 @@ const (
 	TaiXing    // 胎
 	YangXing   // 养
 
+	// 博士十二星
+	Boshi        // 博士
+	Lishi        // 力士
+	Qinglong     // 青龙
+	Xiaohao      // 小耗
+	Jiangjun     // 将军
+	Zoushu       // 奏书
+	FeilianBoshi // 飞廉
+	Xishen       // 喜神
+	Bingfu       // 病符
+	Dahao        // 大耗
+	Fubing       // 伏兵
+	Guanfu       // 官府
+
+	// 流年将前十二星
 	Jiangxing // 将星
 	Panan     // 攀鞍
 	Suiyi     // 岁驿
@@ -358,19 +359,19 @@ const (
 	Xianchi   // (咸池)
 	Yuexi     // 月煞
 	Wangshen  // 亡神
-
-	Suijian  // 岁建
-	Huiqi    // 晦气
-	Sangmen  // (丧门)
-	GuanSuo  // 贯索
-	GuanFu   // (官符)
-	Xiaohao2 // (小耗)
-	Dahao2   // (大耗)
-	Longde   // 龙德
-	Baihu    // (白虎)
-	Tiande   // (天德)
-	Diaoke   // (吊客)
-	Bingfu2  // (病符)
+	// 流年岁前十二星
+	Suijian        // 岁建
+	Huiqi          // 晦气
+	Sangmen        // (丧门)
+	GuanSuo        // 贯索
+	GuanFu         // (官符)
+	XiaohaoSuiqian // (小耗)
+	DahaoSuiqian   // (大耗)
+	Longde         // 龙德
+	Baihu          // (白虎)
+	Tiande         // (天德)
+	Diaoke         // (吊客)
+	BingfuSuiqian  // (病符)
 
 	Zidou // 子斗
 

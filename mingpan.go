@@ -10,11 +10,21 @@ type MingPan struct {
 
 	Gongs []*Gong
 
-	MingGong *Gong `json:"-"`
-	ShenGong *Gong `json:"-"`
+	Minggong *Gong `json:"-"`
+	Shengong *Gong `json:"-"`
 
 	Positions []Element `json:"-"` // 星所在宫的地支代码
 	Lights    []Element `json:"-"` //
+}
+
+func (pan *MingPan) String() string {
+	var buf bytes.Buffer
+	buf.WriteString(pan.MingZhu.String())
+	for _, gong := range pan.Gongs {
+		buf.WriteString("\n")
+		buf.WriteString(gong.String())
+	}
+	return buf.String()
 }
 
 func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingPan {
@@ -29,13 +39,6 @@ func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi Element) *Mi
 		Shi:     shi,
 	}
 
-	gongs := make([]*Gong, 12)
-	for i := Zi; i <= Hai; i++ {
-		gongs[i-Zi] = &Gong{
-			Dizhi: i,
-		}
-	}
-
 	positions := make([]Element, End)
 	for i := 0; i < int(End); i++ {
 		positions[i] = Element(-1)
@@ -43,7 +46,6 @@ func NewMingPan(name string, gender, niangan, nianzhi, yue, ri, shi Element) *Mi
 
 	return &MingPan{
 		MingZhu:   mingZhu,
-		Gongs:     gongs,
 		Positions: positions,
 	}
 }
@@ -63,34 +65,88 @@ type MingZhu struct {
 
 	Mingzhu Element
 	Shenzhu Element
+	Zidou   Element
 }
 
-func (m *MingZhu) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf(`"%s %s%s年 %s%s %s时 %s%s %s"`, m.Name,
-		m.NianGan, m.NianZhi, m.Yue, m.Ri, m.Shi, m.Yinyang, m.Gender, m.Wuxingju,
-	)), nil
+func (m *MingZhu) YinNanYangNv() bool {
+	return (m.Yinyang == Yang && m.Gender == Nan) || (m.Yinyang == YinXing && m.Gender == Nv)
+}
+
+func (m *MingZhu) String() string {
+	return fmt.Sprintf("%s %s%s年 %s%s %s时 %s%s %s\n命主：%s 身主：%s 子斗：%s",
+		m.Name, m.NianGan, m.NianZhi, m.Yue, m.Ri, m.Shi, m.Yinyang, m.Gender, m.Wuxingju,
+		m.Mingzhu, m.Shenzhu, m.Zidou)
 }
 
 type Gong struct {
-	Dizhi   Element
-	Tiangan Element
-	Gong    Element
+	Tiangan, Dizhi Element
 
-	Stars []Element
+	Gong Element
+	Shen bool
+
+	JiaStars, YiStars, BingStars []*Star
+	HuaStars                     []Element
+
+	Changsheng12Stars []Element
+	Boshi12Stars      []Element
+	Jianqian12Stars   []Element
+	Suiqian12Stars    []Element
+
+	DaxianStart int
+	Xiaoxians   int
 }
 
-func (m *Gong) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	for i, star := range m.Stars {
-		if i == 0 {
-			continue
-		}
-		buf.WriteString(star.String())
-		buf.WriteString("[")
-		buf.WriteString(GetStarLight(star, m.Dizhi).String())
-		buf.WriteString("] ")
+func (m *Gong) String() string {
+	buf := bytes.NewBuffer(make([]byte, 0, 1024))
+	buf.WriteString(m.Tiangan.String())
+	buf.WriteString(m.Dizhi.String())
+	buf.WriteString(" ")
+	buf.WriteString(m.Gong.String())
+	if m.Shen {
+		buf.WriteString(" ")
+		buf.WriteString(Shengong.String())
 	}
-	return []byte(fmt.Sprintf(`"%s%s %s: %s"`,
-		m.Tiangan, m.Dizhi, m.Gong, buf.String(),
-	)), nil
+
+	appendStars(buf, "甲级星", m.JiaStars)
+	appendStars(buf, "乙级星", m.YiStars)
+	appendStars(buf, "丙级星", m.BingStars)
+	appendStars2(buf, "长生十二星", m.Changsheng12Stars)
+	appendStars2(buf, "博士十二星", m.Boshi12Stars)
+	appendStars2(buf, "流年将前十二星", m.Jianqian12Stars)
+	appendStars2(buf, "流年岁前十二星", m.Suiqian12Stars)
+
+	return buf.String()
+}
+
+func appendStars(buf *bytes.Buffer, title string, stars []*Star) {
+	buf.WriteString("\n  ")
+	buf.WriteString(title)
+	buf.WriteString(":")
+	for _, star := range stars {
+		buf.WriteString(" ")
+		buf.WriteString(star.Element.String())
+		if star.Light != 0 {
+			buf.WriteString(star.Light.String())
+		}
+		if star.Hua != 0 {
+			buf.WriteString(star.Hua.String())
+		}
+	}
+}
+
+func appendStars2(buf *bytes.Buffer, title string, stars []Element) {
+	buf.WriteString("\n  ")
+	buf.WriteString(title)
+	buf.WriteString(":")
+	for _, star := range stars {
+		buf.WriteString(" ")
+		buf.WriteString(star.String())
+	}
+}
+
+type Star struct {
+	Element Element
+	Level   Element
+	Light   Element
+	Hua     Element
 }
