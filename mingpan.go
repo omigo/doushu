@@ -3,7 +3,6 @@ package doushu
 import (
 	"bytes"
 	"fmt"
-	"strconv"
 )
 
 type MingPan struct {
@@ -88,10 +87,10 @@ type Gong struct {
 	JiaStars, YiStars, BingStars []*Star
 	HuaStars                     []Element
 
-	Changsheng12Stars []Element
-	Boshi12Stars      []Element
-	Jianqian12Stars   []Element
-	Suiqian12Stars    []Element
+	Changsheng12Star Element
+	Boshi12Star      Element
+	Jianqian12Star   Element
+	Suiqian12Star    Element
 
 	DaxianStart int
 	Xiaoxian    int
@@ -99,6 +98,7 @@ type Gong struct {
 
 func (g *Gong) String() string {
 	buf := bytes.NewBuffer(make([]byte, 0, 1024))
+	buf.WriteString("\n")
 	buf.WriteString(g.Tiangan.String())
 	buf.WriteString(g.Dizhi.String())
 	buf.WriteString(" ")
@@ -108,31 +108,31 @@ func (g *Gong) String() string {
 		buf.WriteString(Shengong.String())
 	}
 
+	buf.WriteString(":\n ")
 	appendStars(buf, "甲级星", g.JiaStars)
 	appendStars(buf, "乙级星", g.YiStars)
 	appendStars(buf, "丙级星", g.BingStars)
-	appendStars2(buf, "长生十二星", g.Changsheng12Stars)
-	appendStars2(buf, "博士十二星", g.Boshi12Stars)
-	appendStars2(buf, "流年将前十二星", g.Jianqian12Stars)
-	appendStars2(buf, "流年岁前十二星", g.Suiqian12Stars)
 
-	fmt.Fprintf(buf, "\n  大限: %d-%d", g.DaxianStart, g.DaxianStart+9)
-
-	buf.WriteString("\n  小限:")
+	buf.WriteString("\n  ")
+	buf.WriteString(g.Changsheng12Star.String())
+	buf.WriteString(" ")
+	buf.WriteString(g.Boshi12Star.String())
+	buf.WriteString(" ")
+	buf.WriteString(g.Jianqian12Star.String())
+	buf.WriteString(" ")
+	buf.WriteString(g.Suiqian12Star.String())
+	fmt.Fprintf(buf, "\n  %d-%d ", g.DaxianStart, g.DaxianStart+9)
 	for i := 0; i < 6; i++ {
 		if i != 0 {
 			buf.WriteString(",")
 		}
-		buf.WriteString(strconv.Itoa(g.Xiaoxian + 12*i))
+		fmt.Fprintf(buf, "%d", g.Xiaoxian+12*i)
 	}
 
 	return buf.String()
 }
 
 func appendStars(buf *bytes.Buffer, title string, stars []*Star) {
-	buf.WriteString("\n  ")
-	buf.WriteString(title)
-	buf.WriteString(":")
 	for _, star := range stars {
 		buf.WriteString(" ")
 		buf.WriteString(star.Element.String())
@@ -142,16 +142,6 @@ func appendStars(buf *bytes.Buffer, title string, stars []*Star) {
 		if star.Hua != 0 {
 			buf.WriteString(star.Hua.String())
 		}
-	}
-}
-
-func appendStars2(buf *bytes.Buffer, title string, stars []Element) {
-	buf.WriteString("\n  ")
-	buf.WriteString(title)
-	buf.WriteString(":")
-	for _, star := range stars {
-		buf.WriteString(" ")
-		buf.WriteString(star.String())
 	}
 }
 

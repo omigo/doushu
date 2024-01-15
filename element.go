@@ -35,8 +35,8 @@ func (e Element) Category() (num int, first Element) {
 		return int(Xiongdi-Minggong) + 1, Minggong
 	case e >= Chuyi:
 		return int(Sanshi-Chuyi) + 1, Chuyi
-	case e >= Yiyue:
-		return int(Shieryue-Yiyue) + 1, Yiyue
+	case e >= Zhengyue:
+		return int(Layue-Zhengyue) + 1, Zhengyue
 	case e >= Zi:
 		return int(Hai-Zi) + 1, Zi
 	case e >= Jia:
@@ -158,7 +158,7 @@ const (
 	Hai  // 亥
 
 	// 农历月
-	Yiyue    // 正月
+	Zhengyue // 正月
 	Eryue    // 二月
 	Sanyue   // 三月
 	Siyue    // 四月
@@ -168,40 +168,40 @@ const (
 	Bayue    // 八月
 	Jiuyue   // 九月
 	Shiyue   // 十月
-	Shiyiyue // 十一月
-	Shieryue // 十二月
+	Dongyue  // 冬月
+	Layue    // 腊月
 
 	// 农历日
-	Chuyi  // 初一
-	Chuer  // 初二
-	Chusan // 初三
-	Chusi  // 初四
-	Chuwu  // 初五
-	Chuliu // 初六
-	Chuqi  // 初七
-	Chuba  // 初八
-	Chujiu // 初九
-	Chushi // 初十
-	Shiyi  // 十一
-	Shier  // 十二
-	Shisan // 十三
-	Shisi  // 十四
-	Shiwu  // 十五
-	Shiliu // 十六
-	Shiqi  // 十七
-	Shiba  // 十八
-	Shijiu // 十九
-	Ershi  // 二十
-	Eryi   // 二一
-	Erer   // 二二
-	Ersan  // 二三
-	Ersi   // 二四
-	Erwu   // 二五
-	Erliu  // 二六
-	Erqi   // 二七
-	Erba   // 二八
-	Erjiu  // 二九
-	Sanshi // 三十
+	Chuyi    // 初一
+	Chuer    // 初二
+	Chusan   // 初三
+	Chusi    // 初四
+	Chuwu    // 初五
+	Chuliu   // 初六
+	Chuqi    // 初七
+	Chuba    // 初八
+	Chujiu   // 初九
+	Chushi   // 初十
+	Shiyi    // 十一
+	Shier    // 十二
+	Shisan   // 十三
+	Shisi    // 十四
+	Shiwu    // 十五
+	Shiliu   // 十六
+	Shiqi    // 十七
+	Shiba    // 十八
+	Shijiu   // 十九
+	Ershi    // 二十
+	Ershiyi  // 二十一
+	Ershier  // 二十二
+	Ershisan // 二十三
+	Ershisi  // 二十四
+	Ershiwu  // 二十五
+	Ershiliu // 二十六
+	Ershiqi  // 二十七
+	Ershiba  // 二十八
+	Ershijiu // 二十九
+	Sanshi   // 三十
 
 	// 妻财子禄十二宫
 	Minggong // 命宫

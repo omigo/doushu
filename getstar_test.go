@@ -5,7 +5,7 @@ import (
 )
 
 func TestGetMingGong(t *testing.T) {
-	if GetMinggong(Yiyue, Zi) != Yin {
+	if GetMinggong(Zhengyue, Zi) != Yin {
 		t.Error("GetMingGong error")
 	}
 }

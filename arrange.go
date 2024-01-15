@@ -1,5 +1,11 @@
 package doushu
 
+import (
+	"time"
+
+	"github.com/liujiawm/gocalendar"
+)
+
 func build(pan *MingPan) *MingPan {
 	// 地支
 	pan.Gongs = make([]*Gong, 12)
@@ -56,25 +62,25 @@ func build(pan *MingPan) *MingPan {
 	for star := Changsheng; star <= YangXing; star++ {
 		pos := pan.Positions[star]
 		gong := pan.Gongs[pos.Value()]
-		gong.Changsheng12Stars = append(gong.Changsheng12Stars, star)
+		gong.Changsheng12Star = star
 	}
 	// 博士十二星入宫
 	for star := Boshi; star <= Guanfu; star++ {
 		pos := pan.Positions[star]
 		gong := pan.Gongs[pos.Value()]
-		gong.Boshi12Stars = append(gong.Boshi12Stars, star)
+		gong.Boshi12Star = star
 	}
 	// 流年将前十二星入宫
 	for star := Jiangxing; star <= Wangshen; star++ {
 		pos := pan.Positions[star]
 		gong := pan.Gongs[pos.Value()]
-		gong.Jianqian12Stars = append(gong.Jianqian12Stars, star)
+		gong.Jianqian12Star = star
 	}
 	// 流年岁前十二星入宫
 	for star := Suijian; star <= BingfuSuiqian; star++ {
 		pos := pan.Positions[star]
 		gong := pan.Gongs[pos.Value()]
-		gong.Suiqian12Stars = append(gong.Suiqian12Stars, star)
+		gong.Suiqian12Star = star
 	}
 
 	// 大限
@@ -93,6 +99,19 @@ func build(pan *MingPan) *MingPan {
 	pan.MingZhu.Zidou = pan.Positions[Zidou]
 
 	return pan
+}
+
+var c = gocalendar.NewCalendar(gocalendar.CalendarConfig{
+	NightZiHour: true,
+})
+
+func ToNongli(timeOfBirth time.Time) (niangan, nianzhi, yue, ri, shi Element) {
+	ld := c.GregorianToLunar(timeOfBirth.Year(), int(timeOfBirth.Month()), timeOfBirth.Day())
+	niangan, nianzhi = Jia.Next(ld.YearGZ.HSI), Zi.Next(ld.YearGZ.EBI)
+	yue, ri = Zhengyue.Next(ld.Month-1), Chuyi.Next(ld.Day-1)
+	ct := c.ChineseSexagenaryCycle(timeOfBirth)
+	shi = Zi.Next(ct.Hour.EBI)
+	return niangan, nianzhi, yue, ri, shi
 }
 
 func Arrange(name string, gender, niangan, nianzhi, yue, ri, shi Element) *MingPan {
